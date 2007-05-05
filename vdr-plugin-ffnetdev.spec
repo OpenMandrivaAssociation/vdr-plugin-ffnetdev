@@ -2,7 +2,7 @@
 %define plugin	ffnetdev
 %define name	vdr-plugin-%plugin
 %define version	0.1.0
-%define rel	7
+%define rel	8
 
 Summary:	VDR plugin: Full Featured Network Device for Streaming
 Name:		%name
