@@ -13,7 +13,6 @@ License:	GPL
 URL:		http://developer.berlios.de/projects/ffnetdev
 Source:		http://download.berlios.de/ffnetdev/vdr-%plugin-%version.tar.bz2
 Patch1:		vdr-ffnetdev-active.patch
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	vdr-devel >= 1.4.1-6
 Requires:	vdr-abi = %vdr_abi
 
