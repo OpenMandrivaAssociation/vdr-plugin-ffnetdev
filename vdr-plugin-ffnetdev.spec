@@ -3,7 +3,7 @@
 %define name	vdr-plugin-%plugin
 %define version	0.1.0
 %define snapshot 33
-%define rel	2
+%define rel	3
 
 Summary:	VDR plugin: Full Featured Network Device for Streaming
 Name:		%name
