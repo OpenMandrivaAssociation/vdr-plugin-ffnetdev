@@ -24,6 +24,7 @@ Source:		http://download.berlios.de/ffnetdev/vdr-%plugin-%version.tar.bz2
 Patch0:		ffnetdev-i18n-1.6.patch
 Patch1:		91_ffnetdev-0.1.0+svn20060625-1.5.0.dpatch
 Patch2:		92_vdr-1.5.12-ffnetdev-svn20071122.dpatch
+Patch3:		ffnetdev-duplicate-param-name.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	vdr-devel >= 1.6.0
 Requires:	vdr-abi = %vdr_abi
@@ -42,6 +43,7 @@ device over the network including OSD and TS streaming capabilities.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 %vdr_plugin_prep
 
 %vdr_plugin_params_begin %plugin
