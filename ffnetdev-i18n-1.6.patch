@@ -1,0 +1,263 @@
+
+This is a semi-automatically created i18n adaptation patch and may contain
+errors (such as missing translations). This should only be used as a
+temporary measure until the upstream plugin maintainer fixes the plugin
+properly according to the instructions in i18n-to-gettext.pl.
+
+Created for Mandriva Linux packaging by Anssi Hannula <anssi@mandriva.org>.
+
+
+Index: ffnetdev-33/Makefile
+===================================================================
+--- ffnetdev-33/Makefile
++++ ffnetdev-33/Makefile	2008-04-23 22:58:25.000000000 +0300
+@@ -50,7 +50,7 @@
+ 
+ ### The object files (add further files here):
+ 
+-COMMONOBJS = i18n.o \
++COMMONOBJS =  \
+ 	\
+ 	tools/source.o tools/select.o tools/socket.o tools/tools.o 
+ 
+@@ -95,9 +95,34 @@
+ 
+ -include $(DEPFILE)
+ 
++### Internationalization (I18N):
++
++PODIR     = po
++LOCALEDIR = $(VDRDIR)/locale
++I18Npo    = $(wildcard $(PODIR)/*.po)
++I18Nmsgs  = $(addprefix $(LOCALEDIR)/, $(addsuffix /LC_MESSAGES/vdr-$(PLUGIN).mo, $(notdir $(foreach file, $(I18Npo), $(basename $(file))))))
++I18Npot   = $(PODIR)/$(PLUGIN).pot
++
++%.mo: %.po
++	msgfmt -c -o $@ $<
++
++$(I18Npot): $(wildcard *.[ch] *.[ch]xx *.cc *.[ch]pp *.hh)
++	xgettext -C -cTRANSLATORS --no-wrap --no-location -k -ktr -ktrNOOP --msgid-bugs-address='<http://qa.mandriva.com/>' -o $@ $^
++
++%.po: $(I18Npot)
++	msgmerge -U --no-wrap --no-location --backup=none -q $@ $<
++	@touch $@
++
++$(I18Nmsgs): $(LOCALEDIR)/%/LC_MESSAGES/vdr-$(PLUGIN).mo: $(PODIR)/%.mo
++	@mkdir -p $(dir $@)
++	cp $< $@
++
++.PHONY: i18n
++i18n: $(I18Nmsgs)
++
+ ### Targets:
+ 
+-all: libvdr-$(PLUGIN).so
++all: libvdr-$(PLUGIN).so i18n
+ 
+ libvdr-$(PLUGIN).so: $(SERVEROBJS) $(COMMONOBJS)
+ 
+@@ -114,4 +139,5 @@
+ 	@echo Distribution package created as $(PACKAGE).tar.bz2
+ 
+ clean:
++	@-rm -f $(PODIR)/*.mo $(PODIR)/*.pot
+ 	@-rm -f $(COMMONOBJS) $(SERVEROBJS) $(DEPFILE) *.so *.tar.bz2 core* *~ *.bak
+Index: ffnetdev-33/ffnetdev.c
+===================================================================
+--- ffnetdev-33/ffnetdev.c
++++ ffnetdev-33/ffnetdev.c	2008-04-23 22:58:25.000000000 +0300
+@@ -10,7 +10,7 @@
+ 
+ #include <vdr/tools.h>
+ 
+-#include "i18n.h"
++
+ #include "tsworker.h"
+ #include "netosd.h"
+ #include "ffnetdev.h"
+@@ -23,7 +23,7 @@
+ 
+ 
+ const char *cPluginFFNetDev::VERSION = "0.1.0";
+-const char *cPluginFFNetDev::DESCRIPTION 		= "Full Featured Network Device for Streaming";
++const char *cPluginFFNetDev::DESCRIPTION 		= trNOOP("Full Featured Network Device for Streaming");
+ //const char *cOSDWorker::MAINMENUENTRY 		= "FFNetDev";
+  
+ // --- cNetOSDProvider -----------------------------------------------
+@@ -163,7 +163,7 @@
+ bool cPluginFFNetDev::Start(void)
+ {
+   // Start any background activities the plugin shall perform.
+-  RegisterI18n(Phrases);
++  
+   
+   	  
+   cOSDWorker::Init(OSDPort, this);
+Index: ffnetdev-33/i18n.c
+===================================================================
+--- ffnetdev-33/i18n.c
++++ ffnetdev-33/i18n.c	2008-04-23 22:58:25.000000000 +0300
+@@ -1,60 +0,0 @@
+-/*
+- * i18n.c: Internationalization
+- *
+- * See the README file for copyright information and how to reach the author.
+- *
+- */
+-
+-#include "i18n.h"
+-
+-const tI18nPhrase Phrases[] = {
+-  { "Full Featured Network Device for Streaming",
+-    "Full Featured Network Device for Streaming",
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-  },
+-  { "auto set as primary device",
+-    "auto set as primary device",
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-  },
+-  { "ffnetdev is running",
+-    "ffnetdev läuft gerade",
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-    "",// TODO
+-  },
+-  { NULL }
+-  };
+Index: ffnetdev-33/i18n.h
+===================================================================
+--- ffnetdev-33/i18n.h
++++ ffnetdev-33/i18n.h	2008-04-23 22:58:25.000000000 +0300
+@@ -1,15 +0,0 @@
+-/*
+- * i18n.h: Internationalization
+- *
+- * See the README file for copyright information and how to reach the author.
+- *
+- */
+-
+-#ifndef _I18N__H
+-#define _I18N__H
+-
+-#include <vdr/i18n.h>
+-
+-extern const tI18nPhrase Phrases[];
+-
+-#endif //_I18N__H
+Index: ffnetdev-33/po/de_DE.po
+===================================================================
+--- ffnetdev-33/po/de_DE.po
++++ ffnetdev-33/po/de_DE.po	2008-04-23 22:58:25.000000000 +0300
+@@ -0,0 +1,36 @@
++# VDR ffnetdev plugin language source file.
++# Copyright (C) YEAR THE VDR-ffnetdev'S COPYRIGHT HOLDER
++# This file is distributed under the same license as the VDR-ffnetdev package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: VDR-ffnetdev\n"
++"Report-Msgid-Bugs-To: http://qa.mandriva.com/\n"
++"POT-Creation-Date: 2008-04-23 22:58+0300\n"
++"PO-Revision-Date: 2008-04-23 22:58+0300\n"
++"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
++"Language-Team: <vdr@linuxtv.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=ISO-8859-15\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#: ffnetdev.c:26
++msgid "Full Featured Network Device for Streaming"
++msgstr "Full Featured Network Device for Streaming"
++
++#: ffnetdev.c:153
++msgid "ffnetdev is running"
++msgstr "ffnetdev läuft gerade"
++
++#: ffnetdevsetup.c:18
++msgid "auto set as primary device"
++msgstr "auto set as primary device"
++
++#: ffnetdevsetup.c:18
++msgid "no"
++msgstr ""
++
++#: ffnetdevsetup.c:18
++msgid "yes"
++msgstr ""
+Index: ffnetdev-33/po/ffnetdev.pot
+===================================================================
+--- ffnetdev-33/po/ffnetdev.pot
++++ ffnetdev-33/po/ffnetdev.pot	2008-04-23 22:58:25.000000000 +0300
+@@ -0,0 +1,37 @@
++# SOME DESCRIPTIVE TITLE.
++# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
++# This file is distributed under the same license as the PACKAGE package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++#, fuzzy
++msgid ""
++msgstr ""
++"Project-Id-Version: PACKAGE VERSION\n"
++"Report-Msgid-Bugs-To: http://qa.mandriva.com/\n"
++"POT-Creation-Date: 2008-04-23 22:58+0300\n"
++"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
++"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
++"Language-Team: LANGUAGE <LL@li.org>\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=CHARSET\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++#: ffnetdev.c:26
++msgid "Full Featured Network Device for Streaming"
++msgstr ""
++
++#: ffnetdev.c:153
++msgid "ffnetdev is running"
++msgstr ""
++
++#: ffnetdevsetup.c:18
++msgid "auto set as primary device"
++msgstr ""
++
++#: ffnetdevsetup.c:18
++msgid "no"
++msgstr ""
++
++#: ffnetdevsetup.c:18
++msgid "yes"
++msgstr ""

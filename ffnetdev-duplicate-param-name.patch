@@ -1,0 +1,15 @@
+diff -p -up ffnetdev-33/netosd.h.orig ffnetdev-33/netosd.h
+--- ffnetdev-33/netosd.h.orig	2009-03-21 10:46:32.000000000 +0200
++++ ffnetdev-33/netosd.h	2009-03-21 10:46:57.000000000 +0200
+@@ -18,9 +18,9 @@ private:
+ protected:
+ public:
+ #if VDRVERSNUM >= 10509
+-    cNetOSD(int XOfs, int XOfs, uint Layer);
++    cNetOSD(int XOfs, int YOfs, uint Layer);
+ #else
+-    cNetOSD(int XOfs, int XOfs);
++    cNetOSD(int XOfs, int YOfs);
+ #endif
+     virtual ~cNetOSD();
+     virtual eOsdError CanHandleAreas(const tArea *Areas, int NumAreas);

@@ -1,0 +1,75 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 92_vdr-1.5.12-ffnetdev-svn20071122.dpatch by free-x at vdrportal.de
+## http://vdrportal.de/board/thread.php?postid=672306#post672306
+##
+## Thomas Günther <tom@toms-cafe.de>:
+##   - Added compatibility to VDR < 1.5.9
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Changes for VDR >= 1.5.9.
+
+@DPATCH@
+diff -ur /home/oleg/plugins/ffnetdev/ffnetdev.c ffnetdev/ffnetdev.c
+--- /home/oleg/plugins/ffnetdev/ffnetdev.c	2007-11-22 09:53:42.000000000 +0100
++++ ffnetdev/ffnetdev.c	2007-11-22 10:10:58.000000000 +0100
+@@ -33,10 +33,18 @@
+ 	
+ }
+ 
++#if VDRVERSNUM >= 10509
++cOsd * cNetOSDProvider::CreateOsd(int Left, int Top, uint Layer)
++#else
+ cOsd * cNetOSDProvider::CreateOsd(int Left, int Top)
++#endif
+ {
+     
++#if VDRVERSNUM >= 10509
++    osd = new cNetOSD(Left, Top, 0);
++#else
+     osd = new cNetOSD(Left, Top);
++#endif
+     return osd;
+ }
+ 
+diff -ur /home/oleg/plugins/ffnetdev/netosd.c ffnetdev/netosd.c
+--- /home/oleg/plugins/ffnetdev/netosd.c	2007-11-22 09:53:42.000000000 +0100
++++ ffnetdev/netosd.c	2007-11-22 10:08:14.000000000 +0100
+@@ -9,7 +9,11 @@
+ #include "osdworker.h"
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////////////
++#if VDRVERSNUM >= 10509
++cNetOSD::cNetOSD(int Left, int Top, uint Layer) : cOsd(Left, Top, Layer)
++#else
+ cNetOSD::cNetOSD(int Left, int Top) : cOsd(Left, Top)
++#endif
+ {
+ #ifdef DEBUG   
+    fprintf(stderr,"[ffnetdev] NetOSD: Constructor cNetOSD.\n");
+diff -ur /home/oleg/plugins/ffnetdev/netosd.h ffnetdev/netosd.h
+--- /home/oleg/plugins/ffnetdev/netosd.h	2007-11-22 09:53:42.000000000 +0100
++++ ffnetdev/netosd.h	2007-11-22 10:10:00.000000000 +0100
+@@ -17,7 +17,11 @@
+ 	bool truecolor;
+ protected:
+ public:
++#if VDRVERSNUM >= 10509
++    cNetOSD(int XOfs, int XOfs, uint Layer);
++#else
+     cNetOSD(int XOfs, int XOfs);
++#endif
+     virtual ~cNetOSD();
+     virtual eOsdError CanHandleAreas(const tArea *Areas, int NumAreas);
+     virtual void Flush(void);
+@@ -31,7 +35,11 @@
+     cNetOSD **NetOSD;
+ public:
+     cNetOSDProvider(void);
++#if VDRVERSNUM >= 10509
++    virtual cOsd *CreateOsd(int Left, int Top, uint Layer);
++#else
+     virtual cOsd *CreateOsd(int Left, int Top);
++#endif
+ };
+ 
+ #endif //_NETOSD__H

@@ -1,0 +1,29 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 91_ffnetdev-0.1.0+svn20060625-1.5.0.dpatch by Thomas Günther <tom@toms-cafe.de>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Changes for VDR >= 1.5.0 (applicable to VDR >= 1.4.5).
+
+@DPATCH@
+--- ffnetdev-0.1.0+svn20060625/remote.c
++++ ffnetdev-0.1.0+svn20060625/remote.c
+@@ -27,7 +27,7 @@
+ 	return true;
+ }
+ 
+-bool cMyRemote::Put(uint64 Code, bool Repeat, bool Release)
++bool cMyRemote::Put(uint64_t Code, bool Repeat, bool Release)
+ {
+ #if VDRVERSNUM >= 10347
+     if ((cRemote::IsLearning()) && (Release))
+--- ffnetdev-0.1.0+svn20060625/remote.h
++++ ffnetdev-0.1.0+svn20060625/remote.h
+@@ -17,7 +17,7 @@
+   cMyRemote(const char *Name);
+   virtual bool Initialize(void);
+   virtual bool Ready(void);
+-  virtual bool Put(uint64 Code, bool Repeat, bool Release);
++  virtual bool Put(uint64_t Code, bool Repeat, bool Release);
+ };
+ 
+ 
