@@ -3,7 +3,7 @@
 %define name	vdr-plugin-%plugin
 %define version	0.1.0
 %define snapshot 33
-%define rel	5
+%define rel	6
 
 Summary:	VDR plugin: Full Featured Network Device for Streaming
 Name:		%name
@@ -25,7 +25,6 @@ Patch0:		ffnetdev-i18n-1.6.patch
 Patch1:		91_ffnetdev-0.1.0+svn20060625-1.5.0.dpatch
 Patch2:		92_vdr-1.5.12-ffnetdev-svn20071122.dpatch
 Patch3:		ffnetdev-duplicate-param-name.patch
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	vdr-devel >= 1.6.0
 Requires:	vdr-abi = %vdr_abi
 
@@ -65,17 +64,7 @@ param=-e
 %vdr_plugin_build
 
 %install
-rm -rf %{buildroot}
 %vdr_plugin_install
-
-%clean
-rm -rf %{buildroot}
-
-%post
-%vdr_plugin_post %plugin
-
-%postun
-%vdr_plugin_postun %plugin
 
 %files -f %plugin.vdr
 %defattr(-,root,root)
