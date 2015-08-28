@@ -8,7 +8,7 @@ Version:	0.1.0
 %if %snapshot
 Release:	12.svn%snapshot.7
 %else
-Release:	7
+Release:	8
 %endif
 Group:		Video
 License:	GPL+
