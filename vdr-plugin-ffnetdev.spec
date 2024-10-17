@@ -12,7 +12,7 @@ Release:	8
 %endif
 Group:		Video
 License:	GPL+
-URL:		http://developer.berlios.de/projects/ffnetdev
+URL:		https://developer.berlios.de/projects/ffnetdev
 %if %snapshot
 Source:		vdr-%plugin-%snapshot.tar.bz2
 %else
